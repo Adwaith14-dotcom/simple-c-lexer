@@ -1,49 +1,23 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
 
-int isKeyword(char buffer[]) {
-    char *keywords[] = {"int", "float", "return", "if", "else", "while"};
-    for(int i = 0; i < 6; ++i) {
-        if(strcmp(keywords[i], buffer) == 0) return 1;
-    }
-    return 0;
-}
-
-int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        printf("Usage: ./lexer <filename>\n");
-        return 1;
-    }
-
-    FILE *fp = fopen(argv[1], "r");
-    if (fp == NULL) {
-        printf("Error: Could not open file %s\n", argv[1]);
-        return 1;
-    }
-
-    char ch, buf[32];
-    while ((ch = fgetc(fp)) != EOF) {
-        if (isspace(ch)) continue;
-
-        if (isalpha(ch)) {
-            int j = 0;
-            buf[j++] = ch;
-            while (isalnum(ch = fgetc(fp))) buf[j++] = ch;
+void scan(char *code) {
+    int i = 0;
+    while (code[i] != '\0') {
+        if (isspace(code[i])) { i++; continue; }
+        if (isalpha(code[i])) {
+            char buf[20]; int j = 0;
+            while (isalnum(code[i])) buf[j++] = code[i++];
             buf[j] = '\0';
-            ungetc(ch, fp); // Push back the non-alphanumeric char
-            if (isKeyword(buf)) printf("KEYWORD: %s\n", buf);
-            else printf("IDENTIFIER: %s\n", buf);
-        } 
-        else if (isdigit(ch)) {
-            printf("NUMBER: %c\n", ch);
-        } 
-        else {
-            printf("OPERATOR/SYMBOL: %c\n", ch);
+            printf("Token: Identifier/Keyword [%s]\n", buf);
+        } else if (isdigit(code[i])) {
+            printf("Token: Number [%c]\n", code[i++]);
+        } else {
+            printf("Token: Operator/Symbol [%c]\n", code[i++]);
         }
     }
-
-    fclose(fp);
-    return 0;
 }
+
+int main() {
+    char source[] = "int x = 5 + y;";
+    scan(source);
+    return 0;
+} 

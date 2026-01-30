@@ -1,26 +1,14 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
+# Simple C Lexical Analyzer
 
-void scan(char *code) {
-    int i = 0;
-    while (code[i] != '\0') {
-        if (isspace(code[i])) { i++; continue; }
-        if (isalpha(code[i])) {
-            char buf[20]; int j = 0;
-            while (isalnum(code[i])) buf[j++] = code[i++];
-            buf[j] = '\0';
-            printf("Token: Identifier/Keyword [%s]\n", buf);
-        } else if (isdigit(code[i])) {
-            printf("Token: Number [%c]\n", code[i++]);
-        } else {
-            printf("Token: Operator/Symbol [%c]\n", code[i++]);
-        }
-    }
-}
+A lightweight Lexical Analyzer written in C that tokenizes source code into Keywords, Identifiers, Numbers, and Operators.
 
-int main() {
-    char source[] = "int x = 5 + y;";
-    scan(source);
-    return 0;
-}
+## Features
+- Distinguishes between C keywords (int, return, etc.) and identifiers.
+- Reads input directly from `.c` files.
+- Handles whitespace and basic operators.
+
+## How to Run
+1. **Compile the project:**
+   ```bash
+   gcc lexer.c -o lexer
+
